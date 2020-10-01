@@ -32,15 +32,9 @@ router.post("/", [Auth], async (req, res) => {
     req.body.receiptUrl = "https://picsum.com/random?200";
   if (req.body.type === "Deposit") req.body.wallet = "No wallet";
   const { error } = validate(req.body);
-  if (error)
-    return res
-      .status(400)
-      .send({ success: false, message: error.details[0].message });
+  if (error) return res.status(400).send(error.details[0].message);
   debug("Validated");
   const { receiptUrl, amount, plan, wallet, type } = req.body;
-  const user = await User.findById(userId);
-  if (!user) return res.status(400).send("Invalid genre Id");
-
   const transaction = new Transaction({
     type,
     receiptUrl,

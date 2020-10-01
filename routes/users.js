@@ -64,12 +64,12 @@ router.put("/:id", Auth, async (req, res, next) => {
   }
 });
 
-router.put("/password", Auth, async (req, res, next) => {
+router.patch("/password/", Auth, async (req, res, next) => {
   const { password, newPassword } = req.body;
+  console.log("here is done");
   try {
     let user = await User.findById(req.user._id);
     if (!user) return res.status(404).send("user could not be found");
-
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res.status(400).send("Incorrect old password combination");

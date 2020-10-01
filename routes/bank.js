@@ -13,14 +13,24 @@ router.get("/", [Auth, Admin], async (req, res) => {
 
 router.get("/:id", [Auth], async (req, res) => {
   const id = req.params.id;
-  const bank = await Bank.findById({ user: id });
+  console.log(id);
+  const bank = await Bank.find({ user: id });
   if (!bank) return res.status(404).send("Add your bank details");
   res.status(200).send(bank);
+  console.log(bank);
 });
 
 router.post("/", [Auth], async (req, res) => {
+  console.log(req.body);
   const { error } = validate(req.body);
   const id = req.user._id;
+  const {
+    bank_name,
+    bank_code,
+    account_name,
+    account_number,
+    account_type,
+  } = req.body;
   if (error) return res.status(400).send(error.details[0].message);
   debug("Validated");
   const { message } = req.body;
@@ -36,7 +46,10 @@ router.post("/", [Auth], async (req, res) => {
   });
 
   await bank.save();
-  res.send(bank);
+  res.status(200).send({
+    message: "Your bank details have been saved successfully",
+    data: bank,
+  });
 });
 
 router.put("/:id", [Auth, Admin], async (req, res) => {
