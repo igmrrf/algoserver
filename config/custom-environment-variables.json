@@ -1,0 +1,7 @@
+{
+  "mail": {
+    "password": "APP_PASSWORD"
+  },
+  "vividly_jwtkey": "JWT_SECRET_KEY",
+  "db_url": "DATABASE_URL"
+}
