@@ -1,18 +1,16 @@
 const mongoose = require("mongoose");
 const winston = require("winston");
-
+const config = require("config");
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
+const url = config.get("db_url") || process.env.DATABASE_URL;
 module.exports = function () {
   mongoose
-    .connect(
-      "mongodb+srv://trender:trender@bivest-xas6e.mongodb.net/bcmt?retryWrites=true&w=majority",
-      {
-        serverSelectionTimeoutMS: 5000,
-      }
-    )
+    .connect(url, {
+      serverSelectionTimeoutMS: 5000,
+    })
     .then(() => winston.info("Successful Connection to database"));
 };
