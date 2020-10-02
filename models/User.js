@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const debug = require("debug")("app:model:genre");
+const debug = require("debug")("app:model:user");
 const joi = require("@hapi/joi");
 const config = require("config");
 const jwt = require("jsonwebtoken");

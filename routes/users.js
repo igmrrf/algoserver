@@ -64,6 +64,24 @@ router.put("/:id", Auth, async (req, res, next) => {
   }
 });
 
+router.put("/balance/:id", [Auth, Admin], async (req, res, next) => {
+  console.log(req.body);
+  const { balance, deposits, withdraws, profits } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { balances: { balance, deposits, withdraws, profits } } },
+      { new: true }
+    );
+    if (!user) return res.status(404).send("user could not be found");
+    res
+      .status(201)
+      .send({ message: "User details successfully updated", data: user });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.patch("/password/", Auth, async (req, res, next) => {
   const { password, newPassword } = req.body;
   console.log("here is done");

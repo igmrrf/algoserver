@@ -8,7 +8,7 @@ const { Transaction, validate } = require("../models/Transaction");
 const { User } = require("../models/User");
 
 router.get("/", [Auth, Admin], async (req, res) => {
-  const transactions = await Transaction.find().sort("name");
+  const transactions = await Transaction.find().populate("userId").sort("name");
   res.send(transactions);
 });
 
@@ -47,26 +47,22 @@ router.post("/", [Auth], async (req, res) => {
   res.status(200).send(transaction);
 });
 
-router.put("/:id", [Auth, Admin], async (req, res) => {
-  const { error } = validate(req.body);
-  if (error)
-    return res
-      .status(400)
-      .send({ success: false, message: error.details[0].message });
+router.put("/:id", [Auth, Admin], async (req, res, next) => {
   try {
-    const transaction = await Transaction.findByIdAndUpdate(req.params.id);
+    console.log(req.body);
+    console.log(req.params.id);
+    const { status } = req.body;
+    const transaction = await Transaction.findOneAndUpdate(
+      { _id: req.params.id },
+      { status: status }
+    );
+    const updated = await transaction.save();
     if (!transaction)
-      return res.status(404).send({
-        success: false,
-        message: "transaction could not be found",
-      });
-    res.send(transaction);
-  } catch (e) {
-    debug(e);
-    return res.send({
-      status: false,
-      message: "There was an error",
-    });
+      return res.status(404).send("transaction could not be found");
+    res.send(updated);
+  } catch (error) {
+    debug(error);
+    next(error);
   }
 });
 
