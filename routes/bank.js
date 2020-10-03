@@ -15,8 +15,8 @@ router.get("/:id", [Auth], async (req, res) => {
   const id = req.params.id;
   console.log(id);
   const bank = await Bank.find({ user: id });
-  if (!bank) return res.status(404).send("Add your bank details");
-  res.status(200).send(bank);
+  if (bank.length < 1) return res.status(404).send("Add your bank details");
+  res.status(200).send(bank[0]);
   console.log(bank);
 });
 

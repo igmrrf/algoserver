@@ -7,11 +7,13 @@ const { User } = require("../models/User");
 const { Support, validate } = require("../models/Support");
 
 router.get("/", [Auth, Admin], async (req, res) => {
+  return res.status(400).send("You have no referrals");
   const supports = await Support.find().sort("name");
   res.send(supports);
 });
 
 router.get("/:id", [Auth], async (req, res) => {
+  return res.status(400).send("You have no referrals");
   const support = await Support.findById(req.params.id);
   if (!support)
     return res
@@ -21,6 +23,7 @@ router.get("/:id", [Auth], async (req, res) => {
 });
 
 router.post("/", [Auth], async (req, res) => {
+  return res.status(400).send("You have no referrals");
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   debug("Validated");
@@ -42,6 +45,7 @@ router.post("/", [Auth], async (req, res) => {
 });
 
 router.put("/:id", [Auth, Admin], async (req, res) => {
+  return res.status(400).send("You have no referrals");
   const { error } = validate(req.body);
   if (error)
     return res
@@ -65,6 +69,7 @@ router.put("/:id", [Auth, Admin], async (req, res) => {
 });
 
 router.delete("/:id", [Auth, Admin], async (req, res) => {
+  return res.status(400).send("You have no referrals");
   const support = await Support.findByIdAndRemove(req.params.id);
   if (!support)
     return res

@@ -5,7 +5,8 @@ joi.objectId = require("joi-objectid")(joi);
 
 const supportSchema = new mongoose.Schema({
   userId: {
-    type: joi.objectId(),
+    type: joi.objectId,
+    ref: "User",
   },
   message: {
     type: String,
@@ -16,7 +17,8 @@ const supportSchema = new mongoose.Schema({
 const validateSupport = (data) => {
   debug("Validating");
   const schema = joi.object({
-    message: joi.string().min(50).required(),
+    message: joi.string().min(10).required(),
+    subject: joi.string().min(3).required(),
   });
   return schema.validate(data);
 };

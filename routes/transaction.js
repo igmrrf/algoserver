@@ -47,18 +47,18 @@ router.post("/", [Auth], async (req, res) => {
   res.status(200).send(transaction);
 });
 
-router.put("/:id", [Auth, Admin], async (req, res, next) => {
+router.patch("/:id", [Auth, Admin], async (req, res, next) => {
   try {
     console.log(req.body);
     console.log(req.params.id);
-    const { status } = req.body;
-    const transaction = await Transaction.findOneAndUpdate(
+    await Transaction.findOneAndUpdate(
       { _id: req.params.id },
-      { status: status }
+      { $set: { status: req.body.status } }
     );
-    const updated = await transaction.save();
-    if (!transaction)
-      return res.status(404).send("transaction could not be found");
+    const updated = await Transaction.findById(req.params.id).populate(
+      "userId"
+    );
+    if (!updated) return res.status(404).send("transaction could not be found");
     res.send(updated);
   } catch (error) {
     debug(error);
