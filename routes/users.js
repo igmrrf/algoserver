@@ -60,12 +60,7 @@ router.post("/", async (req, res) => {
 
       <h4>Best Regards, <b><span style="color: blue;">Blockchain Mining Tech</h4>`;
   const sent = await SendMail(email, subject, content);
-  console.log(sent);
-  if (sent)
-    res
-      .header("x-auth-token", token)
-      .status(200)
-      .send(_.pick(user, ["_id", "name", "email"]));
+  if (sent) res.header("x-auth-token", token).send(user);
   else
     res
       .status(400)
@@ -90,7 +85,6 @@ router.put("/:id", Auth, async (req, res, next) => {
 
     <h4>Best Regards, <b><span style="color: blue;">Blockchain Mining Tech</h4>`;
     const sent = await SendMail(user.email, subject, content);
-    console.log(sent);
     if (sent) res.status(200).send(user);
     else
       res

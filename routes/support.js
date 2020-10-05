@@ -5,6 +5,7 @@ const debug = require("debug")("app:route:Support");
 const router = express.Router();
 const { User } = require("../models/User");
 const { Support, validate } = require("../models/Support");
+const SendMail = require("../helpers/mailer");
 
 router.get("/", [Auth, Admin], async (req, res) => {
   const supports = await Support.find().sort("name");
@@ -35,10 +36,17 @@ router.post("/", [Auth], async (req, res) => {
   });
 
   await support.save();
-  res.send({
-    success: true,
-    message: "Check your email within the next 24 hours for response",
-  });
+  const content = message;
+  const sent = await SendMail(user.email, subject, content);
+  if (sent)
+    res.send({
+      success: true,
+      message: "Check your email within the next 24 hours for response",
+    });
+  else
+    res
+      .status(400)
+      .send("There's an error with your email, contact support for help");
 });
 
 router.put("/:id", [Auth, Admin], async (req, res) => {

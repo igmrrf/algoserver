@@ -6,10 +6,7 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
-const url =
-  process.env.NODE_ENV === "production"
-    ? config.get("db_url") || process.env.DATABASE_URL
-    : "mongodb://localhost:27017/bcmt";
+const url = config.get("db_url") || process.env.DATABASE_URL;
 
 console.log(url);
 module.exports = function () {

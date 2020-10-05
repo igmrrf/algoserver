@@ -17,9 +17,7 @@ async function SendMail(email, subject, content) {
     subject: subject,
     html: content,
   };
-
   const sent = await transporter.sendMail(mailOptions);
-
   console.log("Sent oh");
   console.log(sent);
   return sent;
