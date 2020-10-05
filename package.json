@@ -27,6 +27,7 @@
     "lodash": "^4.17.19",
     "mongoose": "^5.9.21",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.4.13",
     "winston": "2.x",
     "winston-mongodb": "^3.0.0"
   }
